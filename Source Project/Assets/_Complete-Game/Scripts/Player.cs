@@ -11,18 +11,23 @@ namespace Completed
 		public float restartLevelDelay = 1f;		//Delay time in seconds to restart level.
 		public int pointsPerFood = 10;				//Number of points to add to player food points when picking up a food object.
 		public int pointsPerSoda = 20;				//Number of points to add to player food points when picking up a soda object.
+        public int pointsPerMedicine = 2;           //Number of points to subtract from player infection level when picking up medicine.
 		public int wallDamage = 1;					//How much damage a player does to a wall when chopping it.
 		public Text foodText;						//UI Text to display current player food total.
+        public Text infectionText;                  //Ui Text to display current player infection level;
 		public AudioClip moveSound1;				//1 of 2 Audio clips to play when player moves.
 		public AudioClip moveSound2;				//2 of 2 Audio clips to play when player moves.
 		public AudioClip eatSound1;					//1 of 2 Audio clips to play when player collects a food object.
 		public AudioClip eatSound2;					//2 of 2 Audio clips to play when player collects a food object.
 		public AudioClip drinkSound1;				//1 of 2 Audio clips to play when player collects a soda object.
 		public AudioClip drinkSound2;				//2 of 2 Audio clips to play when player collects a soda object.
-		public AudioClip gameOverSound;				//Audio clip to play when player dies.
+        public AudioClip medicineSound1;            //1 of 2 Audio clips to play when player collects a medicine object.
+        public AudioClip medicineSound2;            //2 of 2 Audio clips to play when player collects a medicine object.
+        public AudioClip gameOverSound;				//Audio clip to play when player dies.
 		
 		private Animator animator;					//Used to store a reference to the Player's animator component.
 		private int food;                           //Used to store player food points total during level.
+        private int infection;                      //Used to store player infection level during level.
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
         private Vector2 touchOrigin = -Vector2.one;	//Used to store location of screen touch origin for mobile controls.
 #endif
@@ -221,6 +226,23 @@ namespace Completed
 				//Disable the soda object the player collided with.
 				other.gameObject.SetActive (false);
 			}
+            
+            //Check if the tag of the trigger collided with is Medicine
+            else if(other.tag=="Medicine")
+            {
+                //Subtract pointsPerMedicine from players infection level
+                infection -= pointsPerMedicine;
+
+                //Update foodText to represent current total and notify player that they gained points
+                infectionText.text = "-" + pointsPerMedicine + " Infection: " + infection;
+
+                //Call the RandomizeSfx function of SoundManager and pass in two drinking sounds to choose between to play the drinking sound effect.
+                SoundManager.instance.RandomizeSfx(medicineSound1, medicineSound2);
+
+                //Disable the soda object the player collided with.
+                other.gameObject.SetActive(false);
+
+            }
 		}
 		
 		
@@ -231,31 +253,40 @@ namespace Completed
             //and not load all the scene object in the current scene.
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
 		}
-		
-		
-		//LoseFood is called when an enemy attacks the player.
-		//It takes a parameter loss which specifies how many points to lose.
-		public void LoseFood (int loss)
+
+
+        //LoseFood is called when an enemy attacks the player.
+        //It takes a parameter loss which specifies how many points to lose.
+        public void LoseFood(int loss)
 		{
 			//Set the trigger for the player animator to transition to the playerHit animation.
 			animator.SetTrigger ("playerHit");
 			
 			//Subtract lost food points from the players total.
 			food -= loss;
-			
+
+
 			//Update the food display with the new total.
 			foodText.text = "-"+ loss + " Food: " + food;
+;
 			
 			//Check to see if game has ended.
 			CheckIfGameOver ();
 		}
-		
+
+        public void AddInfection (int gain)
+        {
+            infection += gain;
+            infectionText.text = "+" + gain + "Infection";
+            CheckIfGameOver();
+        }
+
 		
 		//CheckIfGameOver checks if the player is out of food points and if so, ends the game.
 		private void CheckIfGameOver ()
 		{
 			//Check if food point total is less than or equal to zero.
-			if (food <= 0) 
+			if (food <= 0||infection >=20) 
 			{
 				//Call the PlaySingle function of SoundManager and pass it the gameOverSound as the audio clip to play.
 				SoundManager.instance.PlaySingle (gameOverSound);
@@ -266,6 +297,8 @@ namespace Completed
 				//Call the GameOver function of GameManager.
 				GameManager.instance.GameOver ();
 			}
+
+
 		}
 	}
 }

@@ -69,9 +69,9 @@ namespace Completed
 			
 			//Get input from the input manager, round it to an integer and store in vertical to set y axis move direction
 			vertical = (int) (Input.GetAxisRaw ("Vertical"));
-			
-			//Check if moving horizontally, if so set vertical to zero.
-			if(horizontal != 0)
+
+            //Check if moving horizontally, if so set vertical to zero.
+            if (horizontal != 0)
 			{
 				vertical = 0;
 			}
@@ -130,8 +130,10 @@ namespace Completed
 		//AttemptMove takes a generic parameter T which for Player will be of the type Wall, it also takes integers for x and y direction to move in.
 		protected override void AttemptMove <T> (int xDir, int yDir)
 		{
-			//Every time player moves, subtract from food points total.
-			food--;
+            
+
+            //Every time player moves, subtract from food points total.
+            food--;
 			
 			//Update food text display to reflect current score.
 			foodText.text = "Food: " + food;
@@ -147,7 +149,10 @@ namespace Completed
 			{
 				//Call RandomizeSfx of SoundManager to play the move sound, passing in two audio clips to choose from.
 				SoundManager.instance.RandomizeSfx (moveSound1, moveSound2);
-			}
+               
+            }
+
+            
 			
 			//Since the player has moved and lost food points, check if the game has ended.
 			CheckIfGameOver ();

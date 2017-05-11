@@ -21,8 +21,7 @@ namespace Completed
 		public AudioClip eatSound2;					//2 of 2 Audio clips to play when player collects a food object.
 		public AudioClip drinkSound1;				//1 of 2 Audio clips to play when player collects a soda object.
 		public AudioClip drinkSound2;				//2 of 2 Audio clips to play when player collects a soda object.
-        public AudioClip medicineSound1;            //1 of 2 Audio clips to play when player collects a medicine object.
-        public AudioClip medicineSound2;            //2 of 2 Audio clips to play when player collects a medicine object.
+        public AudioClip medicineSound;             //Audio clips to play when player collects a medicine object.
         public AudioClip gameOverSound;				//Audio clip to play when player dies.
 		
 		private Animator animator;					//Used to store a reference to the Player's animator component.
@@ -157,9 +156,7 @@ namespace Completed
                
             }
 
-            
-			
-			//Since the player has moved and lost food points, check if the game has ended.
+            //Since the player has moved and lost food points, check if the game has ended.
 			CheckIfGameOver ();
 			
 			//Set the playersTurn boolean of GameManager to false now that players turn is over.
@@ -237,7 +234,7 @@ namespace Completed
                 infectionText.text = "-" + pointsPerMedicine + " Infection: " + infection;
 
                 //Call the RandomizeSfx function of SoundManager and pass in two drinking sounds to choose between to play the drinking sound effect.
-                SoundManager.instance.RandomizeSfx(medicineSound1, medicineSound2);
+                SoundManager.instance.PlaySingle(medicineSound);
 
                 //Disable the soda object the player collided with.
                 other.gameObject.SetActive(false);

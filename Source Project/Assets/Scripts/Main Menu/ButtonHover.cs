@@ -7,15 +7,7 @@ using UnityEngine.SceneManagement;
 public class ButtonHover : MonoBehaviour {
 	public GameObject startButton;
 	public Sprite startIMG1, startIMG2;
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-			
-	}
+
 		
 	void OnMouseEnter() {
 		startButton.GetComponent<SpriteRenderer> ().sprite = startIMG2;
@@ -25,6 +17,6 @@ public class ButtonHover : MonoBehaviour {
 	}
 
 	void OnMouseDown() {
-		SceneManager.LoadScene(0);
+		SceneManager.LoadScene("_Complete-Game");
 	}
 }

@@ -26,7 +26,8 @@ namespace Completed
 		
 		private Animator animator;					//Used to store a reference to the Player's animator component.
 		private int food;                           //Used to store player food points total during level.
-        private int infection;                      //Used to store player infection level during level.
+        public int infection;                      //Used to store player infection level during level.
+        
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
         private Vector2 touchOrigin = -Vector2.one;	//Used to store location of screen touch origin for mobile controls.
 #endif
@@ -156,8 +157,11 @@ namespace Completed
                
             }
 
+            animator.SetTrigger("Walk1");
+
+
             //Since the player has moved and lost food points, check if the game has ended.
-			CheckIfGameOver ();
+            CheckIfGameOver();
 			
 			//Set the playersTurn boolean of GameManager to false now that players turn is over.
 			GameManager.instance.playersTurn = false;

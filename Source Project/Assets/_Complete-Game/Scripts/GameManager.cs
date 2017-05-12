@@ -15,7 +15,8 @@ namespace Completed
         public int playerInfectionlevel = 0;                    //Starting value for Player infection level;
 		public static GameManager instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
 		[HideInInspector] public bool playersTurn = true;		//Boolean to check if it's players turn, hidden in inspector but public.
-		
+
+	    public int money;	                                    //Probably not what we need but this fixes some compiler errors for now
 		
 		private Text levelText;									//Text to display current level number.
 		private GameObject levelImage;							//Image to block out level as levels are being set up, background for levelText.

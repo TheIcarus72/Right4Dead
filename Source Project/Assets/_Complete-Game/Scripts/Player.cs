@@ -290,6 +290,7 @@ namespace Completed
 
         public void AddInfection (int gain)
         {
+            animator.SetTrigger("playerHit");
             infection += gain;
             infectionText.text = "+" + gain + "Infection";
             CheckIfGameOver();

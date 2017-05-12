@@ -157,7 +157,22 @@ namespace Completed
                
             }
 
-            animator.SetTrigger("Walk1");
+            if(infection <= 0)
+            {
+                animator.SetTrigger("Walk1");
+            }
+            if (infection <= 0)
+            {
+                animator.SetTrigger("Walk2");
+            }
+            if (infection <= 0)
+            {
+                animator.SetTrigger("Walk3");
+            }
+            if (infection <= 0)
+            {
+                animator.SetTrigger("Walk4");
+            }
 
 
             //Since the player has moved and lost food points, check if the game has ended.

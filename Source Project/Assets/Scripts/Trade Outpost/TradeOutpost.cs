@@ -7,20 +7,19 @@ public class TradeOutpost : MonoBehaviour {
 	private GameObject player;
 	public void buyMedicine() 
 	{
-		//if (GetComponent<Player>().money >= 5){
+		if (GameManager.instance.money >= 5){
 			
 			GetComponent<Player> ().infection--;
-		//	player.GetComponent<Player> ().money -= 5;
-		//}
+			GameManager.instance.money -= 5;
+		}
 	}
 
 	public void buyFood()
 	{
-		player = GameObject.FindGameObjectWithTag ("Player");
-		//if (GetComponent<Player>().money >= 1){
+		if (GameManager.instance.money >= 1){
 
 		GameManager.instance.playerFoodPoints += 5;
-		//GameManager.instance.money--;
-		//}
+		GameManager.instance.money--;
+		}
 	}
 }

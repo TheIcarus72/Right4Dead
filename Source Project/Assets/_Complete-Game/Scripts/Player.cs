@@ -262,10 +262,8 @@ namespace Completed
 			//Subtract lost food points from the players total.
 			food -= loss;
 
-
 			//Update the food display with the new total.
 			foodText.text = "-"+ loss + " Food: " + food;
-;
 			
 			//Check to see if game has ended.
 			CheckIfGameOver ();

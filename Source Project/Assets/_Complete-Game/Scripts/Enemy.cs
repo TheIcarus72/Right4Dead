@@ -7,7 +7,9 @@ namespace Completed
 	public class Enemy : MovingObject
 	{
 		public int playerDamage; 							//The amount of food points to subtract from the player when attacking.
-		public AudioClip attackSound1;						//First of two audio clips to play when attacking the player.
+        public int playerInfection;                         //The amount of infection to add to the player when attacking.
+
+        public AudioClip attackSound1;						//First of two audio clips to play when attacking the player.
 		public AudioClip attackSound2;						//Second of two audio clips to play when attacking the player.
 		
 		
@@ -87,7 +89,8 @@ namespace Completed
 			
 			//Call the LoseFood function of hitPlayer passing it playerDamage, the amount of foodpoints to be subtracted.
 			hitPlayer.LoseFood (playerDamage);
-			
+            hitPlayer.AddInfection (playerInfection);
+           
 			//Set the attack trigger of animator to trigger Enemy attack animation.
 			animator.SetTrigger ("enemyAttack");
 			

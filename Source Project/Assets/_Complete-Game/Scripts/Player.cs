@@ -26,7 +26,7 @@ namespace Completed
 		
 		private Animator animator;					//Used to store a reference to the Player's animator component.
 		private int food;                           //Used to store player food points total during level.
-        public int infection;                      //Used to store player infection level during level.
+        public int infection;                       //Used to store player infection level during level.
         
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
         private Vector2 touchOrigin = -Vector2.one;	//Used to store location of screen touch origin for mobile controls.
@@ -36,17 +36,25 @@ namespace Completed
 		//Start overrides the Start function of MovingObject
 		protected override void Start ()
 		{
-			//Get a component reference to the Player's animator component
+            
+            //Get a component reference to the Player's animator component
 			animator = GetComponent<Animator>();
 			
 			//Get the current food point total stored in GameManager.instance between levels.
 			food = GameManager.instance.playerFoodPoints;
-			
-			//Set the foodText to reflect the current player food total.
-			foodText.text = "Food: " + food;
-			
-			//Call the Start function of the MovingObject base class.
-			base.Start ();
+
+            //Get the current infection level stored in GameManager.instance between levels.
+            infection = GameManager.instance.playerInfectionlevel;
+
+            //Set the foodText to reflect the current player food total.
+            foodText.text = "Food: " + food;
+
+            //Set the infectionText to reflect the current player infection level.
+            infectionText.text = "Infection: " + infection;
+
+
+            //Call the Start function of the MovingObject base class.
+            base.Start ();
 		}
 		
 		
@@ -55,13 +63,19 @@ namespace Completed
 		{
 			//When Player object is disabled, store the current local food total in the GameManager so it can be re-loaded in next level.
 			GameManager.instance.playerFoodPoints = food;
+
+            //When Player object is disabled, store the current local infection level in the GameManager so it can be re-loaded in next level.
+            GameManager.instance.playerInfectionlevel = infection;
 		}
 		
 		
 		private void Update ()
 		{
-			//If it's not the player's turn, exit the function.
-			if(!GameManager.instance.playersTurn) return;
+            //Allows the infection level to not go below the 0 value when picking up medicine item
+            infection = Mathf.Clamp(infection, 0, 20);
+
+            //If it's not the player's turn, exit the function.
+            if (!GameManager.instance.playersTurn) return;
 			
 			int horizontal = 0;  	//Used to store the horizontal move direction.
 			int vertical = 0;		//Used to store the vertical move direction.
@@ -129,19 +143,37 @@ namespace Completed
 				//Pass in horizontal and vertical as parameters to specify the direction to move Player in.
 				AttemptMove<Wall> (horizontal, vertical);
 			}
-		}
+
+            if(infection<=4)
+            {
+                animator.SetTrigger("Idle1");
+            }
+            if(infection >=5)
+            {
+                animator.SetTrigger("Idle2");
+            }
+            if (infection >= 10)
+            {
+                animator.SetTrigger("Idle3");
+            }
+            if (infection >= 15)
+            {
+                animator.SetTrigger("Idle4");
+            }
+        }
 		
 		//AttemptMove overrides the AttemptMove function in the base class MovingObject
 		//AttemptMove takes a generic parameter T which for Player will be of the type Wall, it also takes integers for x and y direction to move in.
 		protected override void AttemptMove <T> (int xDir, int yDir)
 		{
-            
-
             //Every time player moves, subtract from food points total.
             food--;
 			
 			//Update food text display to reflect current score.
 			foodText.text = "Food: " + food;
+
+            //Update infection text display to reflect current score.
+            infectionText.text = "Infection: " + infection;
 			
 			//Call the AttemptMove method of the base class, passing in the component T (in this case Wall) and x and y direction to move.
 			base.AttemptMove <T> (xDir, yDir);
@@ -156,24 +188,24 @@ namespace Completed
 				SoundManager.instance.RandomizeSfx (moveSound1, moveSound2);
                
             }
-
-            if(infection <= 0)
+            
+            if (infection <= 4)
             {
                 animator.SetTrigger("Walk1");
             }
-            if (infection <= 0)
+            if (infection >= 5)
             {
                 animator.SetTrigger("Walk2");
             }
-            if (infection <= 0)
+            if (infection >= 10)
             {
                 animator.SetTrigger("Walk3");
             }
-            if (infection <= 0)
+            if (infection >= 15)
             {
                 animator.SetTrigger("Walk4");
             }
-
+            
 
             //Since the player has moved and lost food points, check if the game has ended.
             CheckIfGameOver();
@@ -192,60 +224,76 @@ namespace Completed
 			
 			//Call the DamageWall function of the Wall we are hitting.
 			hitWall.DamageWall (wallDamage);
-			
-			//Set the attack trigger of the player's animation controller in order to play the player's attack animation.
-			animator.SetTrigger ("playerChop");
-		}
-		
-		
-		//OnTriggerEnter2D is sent when another object enters a trigger collider attached to this object (2D physics only).
-		private void OnTriggerEnter2D (Collider2D other)
-		{
-			//Check if the tag of the trigger collided with is Exit.
-			if(other.tag == "Exit")
-			{
-				//Invoke the Restart function to start the next level with a delay of restartLevelDelay (default 1 second).
-				Invoke ("Restart", restartLevelDelay);
-				
-				//Disable the player object since level is over.
-				enabled = false;
-			}
-			
-			//Check if the tag of the trigger collided with is Food.
-			else if(other.tag == "Food")
-			{
-				//Add pointsPerFood to the players current food total.
-				food += pointsPerFood;
-				
-				//Update foodText to represent current total and notify player that they gained points
-				foodText.text = "+" + pointsPerFood + " Food: " + food;
-				
-				//Call the RandomizeSfx function of SoundManager and pass in two eating sounds to choose between to play the eating sound effect.
-				SoundManager.instance.RandomizeSfx (eatSound1, eatSound2);
-				
-				//Disable the food object the player collided with.
-				other.gameObject.SetActive (false);
-			}
-			
-			//Check if the tag of the trigger collided with is Soda.
-			else if(other.tag == "Soda")
-			{
-				//Add pointsPerSoda to players food points total
-				food += pointsPerSoda;
-				
-				//Update foodText to represent current total and notify player that they gained points
-				foodText.text = "+" + pointsPerSoda + " Food: " + food;
-				
-				//Call the RandomizeSfx function of SoundManager and pass in two drinking sounds to choose between to play the drinking sound effect.
-				SoundManager.instance.RandomizeSfx (drinkSound1, drinkSound2);
-				
-				//Disable the soda object the player collided with.
-				other.gameObject.SetActive (false);
-			}
-            
-            //Check if the tag of the trigger collided with is Medicine
-            else if(other.tag=="Medicine")
+
+            //Set the attack trigger of the player's animation controller in order to play the player's attack animation.
+            if (infection <= 4)
             {
+                animator.SetTrigger("playerChop");
+            }
+            if (infection >= 5)
+            {
+                animator.SetTrigger("Chop2");
+            }
+            if (infection >= 10)
+            {
+                animator.SetTrigger("Chop3");
+            }
+            if (infection >= 15)
+            {
+                animator.SetTrigger("Chop4");
+            }
+        }
+
+
+        //OnTriggerEnter2D is sent when another object enters a trigger collider attached to this object (2D physics only).
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            //Check if the tag of the trigger collided with is Exit.
+            if (other.tag == "Exit")
+            {
+                //Invoke the Restart function to start the next level with a delay of restartLevelDelay (default 1 second).
+                Invoke("Restart", restartLevelDelay);
+
+                //Disable the player object since level is over.
+                enabled = false;
+            }
+
+            //Check if the tag of the trigger collided with is Food.
+            else if (other.tag == "Food")
+            {
+                //Add pointsPerFood to the players current food total.
+                food += pointsPerFood;
+
+                //Update foodText to represent current total and notify player that they gained points
+                foodText.text = "+" + pointsPerFood + " Food: " + food;
+
+                //Call the RandomizeSfx function of SoundManager and pass in two eating sounds to choose between to play the eating sound effect.
+                SoundManager.instance.RandomizeSfx(eatSound1, eatSound2);
+
+                //Disable the food object the player collided with.
+                other.gameObject.SetActive(false);
+            }
+
+            //Check if the tag of the trigger collided with is Soda.
+            else if (other.tag == "Soda")
+            {
+                //Add pointsPerSoda to players food points total
+                food += pointsPerSoda;
+
+                //Update foodText to represent current total and notify player that they gained points
+                foodText.text = "+" + pointsPerSoda + " Food: " + food;
+
+                //Call the RandomizeSfx function of SoundManager and pass in two drinking sounds to choose between to play the drinking sound effect.
+                SoundManager.instance.RandomizeSfx(drinkSound1, drinkSound2);
+
+                //Disable the soda object the player collided with.
+                other.gameObject.SetActive(false);
+            }
+
+            //Check if the tag of the trigger collided with is Medicine
+            else if (other.tag == "Medicine")
+            {
+                
                 //Subtract pointsPerMedicine from players infection level
                 infection -= pointsPerMedicine;
 
@@ -259,7 +307,7 @@ namespace Completed
                 other.gameObject.SetActive(false);
 
             }
-		}
+        }
 		
 		
 		//Restart reloads the scene when called.
@@ -275,11 +323,26 @@ namespace Completed
         //It takes a parameter loss which specifies how many points to lose.
         public void LoseFood(int loss)
 		{
-			//Set the trigger for the player animator to transition to the playerHit animation.
-			animator.SetTrigger ("playerHit");
-			
-			//Subtract lost food points from the players total.
-			food -= loss;
+            //Set the trigger for the player animator to transition to the playerHit animation.
+            if (infection <= 4)
+            {
+                animator.SetTrigger("playerHit");
+            }
+            if (infection >= 5)
+            {
+                animator.SetTrigger("Hit2");
+            }
+            if (infection >= 10)
+            {
+                animator.SetTrigger("Hit3");
+            }
+            if (infection >= 15)
+            {
+                animator.SetTrigger("Hit4");
+            }
+
+            //Subtract lost food points from the players total.
+            food -= loss;
 
 			//Update the food display with the new total.
 			foodText.text = "-"+ loss + " Food: " + food;
@@ -292,7 +355,7 @@ namespace Completed
         {
             animator.SetTrigger("playerHit");
             infection += gain;
-            infectionText.text = "+" + gain + "Infection";
+            infectionText.text = "+" + gain + "Infection: "+infection;
             CheckIfGameOver();
         }
 

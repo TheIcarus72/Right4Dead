@@ -25,7 +25,6 @@ public class ButtonHover : MonoBehaviour {
 	}
 
 	void OnMouseDown() {
-		Debug.Log ("Hello World");
 		SceneManager.LoadScene(0);
 	}
 }

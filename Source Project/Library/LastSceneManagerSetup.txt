@@ -1,4 +1,8 @@
 sceneSetups:
+<<<<<<< HEAD
 - path: Assets/_Complete-Game/Scenes/Temporary Trade outpost.unity
+=======
+- path: Assets/_Complete-Game/_Complete-Game.unity
+>>>>>>> 643706987f0dd8b1f01b2eeff031cef832993ea7
   isLoaded: 1
   isActive: 1

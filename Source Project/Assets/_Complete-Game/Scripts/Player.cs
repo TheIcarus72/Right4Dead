@@ -22,11 +22,14 @@ namespace Completed
 		public AudioClip drinkSound1;				//1 of 2 Audio clips to play when player collects a soda object.
 		public AudioClip drinkSound2;				//2 of 2 Audio clips to play when player collects a soda object.
         public AudioClip medicineSound;             //Audio clips to play when player collects a medicine object.
-        public AudioClip gameOverSound;				//Audio clip to play when player dies.
-		
+        public AudioClip gameOverSound;             //Audio clip to play when player dies.
+        private PlayerBars playerbar;
+
+
 		private Animator animator;					//Used to store a reference to the Player's animator component.
-		private int food;                           //Used to store player food points total during level.
+		public int food;                           //Used to store player food points total during level.
         public int infection;                       //Used to store player infection level during level.
+
         
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
         private Vector2 touchOrigin = -Vector2.one;	//Used to store location of screen touch origin for mobile controls.
@@ -36,12 +39,12 @@ namespace Completed
 		//Start overrides the Start function of MovingObject
 		protected override void Start ()
 		{
-            
+            playerbar = GetComponent<PlayerBars>();
             //Get a component reference to the Player's animator component
-			animator = GetComponent<Animator>();
-			
-			//Get the current food point total stored in GameManager.instance between levels.
-			food = GameManager.instance.playerFoodPoints;
+            animator = GetComponent<Animator>();
+  
+            //Get the current food point total stored in GameManager.instance between levels.
+            food = GameManager.instance.playerFoodPoints;
 
             //Get the current infection level stored in GameManager.instance between levels.
             infection = GameManager.instance.playerInfectionlevel;
@@ -52,20 +55,23 @@ namespace Completed
             //Set the infectionText to reflect the current player infection level.
             infectionText.text = "Infection: " + infection;
 
-
+            
             //Call the Start function of the MovingObject base class.
             base.Start ();
 		}
-		
-		
-		//This function is called when the behaviour becomes disabled or inactive.
-		private void OnDisable ()
+
+
+
+        //This function is called when the behaviour becomes disabled or inactive.
+        private void OnDisable ()
 		{
 			//When Player object is disabled, store the current local food total in the GameManager so it can be re-loaded in next level.
 			GameManager.instance.playerFoodPoints = food;
 
             //When Player object is disabled, store the current local infection level in the GameManager so it can be re-loaded in next level.
             GameManager.instance.playerInfectionlevel = infection;
+
+
 		}
 		
 		
@@ -73,6 +79,8 @@ namespace Completed
 		{
             //Allows the infection level to not go below the 0 value when picking up medicine item
             infection = Mathf.Clamp(infection, 0, 20);
+            //Allows the food level to not go above the value of 250 when picking up food items
+            food =  Mathf.Clamp(food, 0, 250);
 
             //If it's not the player's turn, exit the function.
             if (!GameManager.instance.playersTurn) return;
@@ -168,7 +176,7 @@ namespace Completed
 		{
             //Every time player moves, subtract from food points total.
             food--;
-			
+
 			//Update food text display to reflect current score.
 			foodText.text = "Food: " + food;
 
@@ -205,7 +213,6 @@ namespace Completed
             {
                 animator.SetTrigger("Walk4");
             }
-            
 
             //Since the player has moved and lost food points, check if the game has ended.
             CheckIfGameOver();
@@ -214,10 +221,11 @@ namespace Completed
 			GameManager.instance.playersTurn = false;
 		}
 		
-		
-		//OnCantMove overrides the abstract function OnCantMove in MovingObject.
-		//It takes a generic parameter T which in the case of Player is a Wall which the player can attack and destroy.
-		protected override void OnCantMove <T> (T component)
+ 
+
+        //OnCantMove overrides the abstract function OnCantMove in MovingObject.
+        //It takes a generic parameter T which in the case of Player is a Wall which the player can attack and destroy.
+        protected override void OnCantMove <T> (T component)
 		{
 			//Set hitWall to equal the component passed in as a parameter.
 			Wall hitWall = component as Wall;
@@ -263,7 +271,7 @@ namespace Completed
             {
                 //Add pointsPerFood to the players current food total.
                 food += pointsPerFood;
-
+               // playerbar.PickUpFood();
                 //Update foodText to represent current total and notify player that they gained points
                 foodText.text = "+" + pointsPerFood + " Food: " + food;
 
@@ -279,7 +287,7 @@ namespace Completed
             {
                 //Add pointsPerSoda to players food points total
                 food += pointsPerSoda;
-
+               // playerbar.PickUpSoda();
                 //Update foodText to represent current total and notify player that they gained points
                 foodText.text = "+" + pointsPerSoda + " Food: " + food;
 
@@ -343,9 +351,9 @@ namespace Completed
 
             //Subtract lost food points from the players total.
             food -= loss;
-
-			//Update the food display with the new total.
-			foodText.text = "-"+ loss + " Food: " + food;
+            //playerbar.healthBarValue.CurrentVal -= loss;
+            //Update the food display with the new total.
+            foodText.text = "-"+ loss + " Food: " + food;
 			
 			//Check to see if game has ended.
 			CheckIfGameOver ();

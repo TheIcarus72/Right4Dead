@@ -26,29 +26,29 @@ namespace Completed
         public AudioClip medicineSound;             //Audio clips to play when player collects a medicine object.
         public AudioClip gameOverSound;             //Audio clip to play when player dies.
 		public GameObject TraderCanvas;
-
         private PlayerBars playerbar;
 
-
-		private Animator animator;					//Used to store a reference to the Player's animator component.
+        private CamShake camshake;
+        private float shakeAmount = 0.1f;
+        private float shakeTime = 0.2f;
+        private Animator animator;					//Used to store a reference to the Player's animator component.
 		public int food;                           //Used to store player food points total during level.
         public int infection;                       //Used to store player infection level during level.
 
-        
+
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
         private Vector2 touchOrigin = -Vector2.one;	//Used to store location of screen touch origin for mobile controls.
 #endif
-		
-		
-		//Start overrides the Start function of MovingObject
-		protected override void Start ()
+
+        //Start overrides the Start function of MovingObject
+        protected override void Start ()
 		{
 			playerbar = GameObject.Find("GameObject").GetComponent<PlayerBars>();
 			if (playerbar == null)
 				Debug.Log ("playerbar not found");
             //Get a component reference to the Player's animator component
             animator = GetComponent<Animator>();
-  
+            camshake = GameObject.Find("Camera").GetComponent<CamShake>();
             //Get the current food point total stored in GameManager.instance between levels.
             food = GameManager.instance.playerFoodPoints;
 
@@ -374,7 +374,9 @@ namespace Completed
 
             //Subtract lost food points from the players total.
             food -= loss;
-            //playerbar.healthBarValue.CurrentVal -= loss;
+
+            camshake.Shake(shakeAmount, shakeTime);
+
             //Update the food display with the new total.
             foodText.text = "-"+ loss + " Food: " + food;
 			

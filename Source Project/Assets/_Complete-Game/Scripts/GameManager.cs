@@ -137,7 +137,7 @@ namespace Completed
 		public void GameOver()
 		{
 			//Set levelText to display number of levels passed and game over message
-			levelText.text = "After " + level + " days, you starved.";
+			levelText.text = "After " + level + " long days, you starved.";
 			
 			//Enable black background image gameObject.
 			levelImage.SetActive(true);
@@ -145,6 +145,18 @@ namespace Completed
 			//Disable this GameManager.
 			enabled = false;
 		}
+
+        public void GameOver1()
+        {
+            //Set levelText to display number of levels passed and game over message
+            levelText.text = "After " + level + " long days, the infection took over your body.";
+
+            //Enable black background image gameObject.
+            levelImage.SetActive(true);
+
+            //Disable this GameManager.
+            enabled = false;
+        }
 		
 		//Coroutine to move enemies in sequence.
 		IEnumerator MoveEnemies()

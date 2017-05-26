@@ -13,7 +13,7 @@ namespace Completed
         public Stat healthBarValue;
         public static PlayerBars instance = null;
         //[SerializeField]
-        //private Stat infectionBarValue;
+        public Stat infectionBarValue;
 
 
 
@@ -38,20 +38,11 @@ namespace Completed
             //Sets this to not be destroyed when reloading scene
             DontDestroyOnLoad(gameObject);
             healthBarValue.Initialize();
+			infectionBarValue.Initialize ();
         }
 
         private void Update()
         {
-            if(Input.GetKeyDown(KeyCode.Q))
-            {
-                healthBarValue.CurrentVal -= 10;
-
-            }
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                healthBarValue.CurrentVal += 10;
-
-            }
         }
     }
 }

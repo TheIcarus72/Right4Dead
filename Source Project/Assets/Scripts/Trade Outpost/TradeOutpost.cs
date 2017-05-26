@@ -4,24 +4,31 @@ using UnityEngine;
 using Completed;
 
 public class TradeOutpost : MonoBehaviour {
-	private GameObject player;
+    public Player player;
 	public GameObject tradeCanvas;
 	public void buyMedicine() 
 	{
-		if (GameManager.instance.money >= 5){
-			
-			GetComponent<Player> ().infection--;
-			GameManager.instance.money -= 5;
-		}
+		if (player.money >= 5){
+
+            player.infection--;
+            player.infectionText.text = "Infection: " + player.infection;
+            player.money -= 5;
+            player.moneyText.text = "Money: " + player.money;
+
+            //GetComponent<Player> ().infection--;
+            //GameManager.instance.money -= 5;
+        }
 	}
 
 	public void buyFood()
 	{
-		if (GameManager.instance.money >= 1){
+		if (player.money >= 1){
 
-		GameManager.instance.playerFoodPoints += 5;
-		GameManager.instance.money--;
-		}
+            player.food++;
+            player.foodText.text = "Food: " + player.food;
+            player.money --;
+            player.moneyText.text = "Money: " + player.money;
+        }
 	}
 
 	public void Close()

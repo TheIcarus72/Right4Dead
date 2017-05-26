@@ -17,9 +17,14 @@ namespace Completed
 		public Stat healthBarValue;
         public Text infectionText;                  //Ui Text to display current player infection level;
 		public Stat infectionValue;
+        public Text moneyText;
+        public Stat moneyValue;
 		public AudioClip moveSound1;				//1 of 2 Audio clips to play when player moves.
+		public AudioClip moveSound2;				//2 of 2 Audio clips to play when player moves.
 		public AudioClip eatSound1;					//1 of 2 Audio clips to play when player collects a food object.
+		public AudioClip eatSound2;					//2 of 2 Audio clips to play when player collects a food object.
 		public AudioClip drinkSound1;				//1 of 2 Audio clips to play when player collects a soda object.
+		public AudioClip drinkSound2;				//2 of 2 Audio clips to play when player collects a soda object.
         public AudioClip medicineSound;             //Audio clips to play when player collects a medicine object.
         public AudioClip gameOverSound;             //Audio clip to play when player dies.
 		public GameObject TraderCanvas;
@@ -31,6 +36,7 @@ namespace Completed
         private Animator animator;					//Used to store a reference to the Player's animator component.
 		public int food;                           //Used to store player food points total during level.
         public int infection;                       //Used to store player infection level during level.
+        public int money;
 
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
@@ -58,6 +64,8 @@ namespace Completed
             //Set the infectionText to reflect the current player infection level.
             infectionText.text = "Infection: " + infection;
 
+            moneyText.text = "Money: " + money;
+
             
             //Call the Start function of the MovingObject base class.
             base.Start ();
@@ -73,6 +81,8 @@ namespace Completed
 
             //When Player object is disabled, store the current local infection level in the GameManager so it can be re-loaded in next level.
             GameManager.instance.playerInfectionlevel = infection;
+
+            GameManager.instance.money = money;
 
 
 		}
@@ -178,14 +188,14 @@ namespace Completed
 
 			healthBarValue.CurrentVal = food;
 			infectionValue.CurrentVal = infection;
+            moneyValue.CurrentVal = money;
         }
 		
 		//AttemptMove overrides the AttemptMove function in the base class MovingObject
 		//AttemptMove takes a generic parameter T which for Player will be of the type Wall, it also takes integers for x and y direction to move in.
 		protected override void AttemptMove <T> (int xDir, int yDir)
 		{
-            //Every time player moves, subtract from food points total.
-            food--;
+           
 
 			//Update food text display to reflect current score.
 			foodText.text = "Food: " + food;
@@ -202,8 +212,10 @@ namespace Completed
 			//If Move returns true, meaning Player was able to move into an empty space.
 			if (Move (xDir, yDir, out hit)) 
 			{
-                //Call RandomizeSfx of SoundManager to play the move sound, passing in two audio clips to choose from.
-                SoundManager.instance.PlaySingle(moveSound1);
+				//Call RandomizeSfx of SoundManager to play the move sound, passing in two audio clips to choose from.
+				SoundManager.instance.RandomizeSfx (moveSound1, moveSound2);
+                //Every time player moves, subtract from food points total.
+                food--;
 
             }
             
@@ -260,6 +272,8 @@ namespace Completed
             {
                 animator.SetTrigger("Chop4");
             }
+            money++;
+            moneyText.text = "Money: " + money;
         }
 
 
@@ -291,7 +305,7 @@ namespace Completed
                 foodText.text = "+" + pointsPerFood + " Food: " + food;
 
                 //Call the RandomizeSfx function of SoundManager and pass in two eating sounds to choose between to play the eating sound effect.
-                SoundManager.instance.PlaySingle(eatSound1);
+                SoundManager.instance.RandomizeSfx(eatSound1, eatSound2);
 
                 //Disable the food object the player collided with.
                 other.gameObject.SetActive(false);
@@ -307,7 +321,7 @@ namespace Completed
                 foodText.text = "+" + pointsPerSoda + " Food: " + food;
 
                 //Call the RandomizeSfx function of SoundManager and pass in two drinking sounds to choose between to play the drinking sound effect.
-                SoundManager.instance.PlaySingle(drinkSound1);
+                SoundManager.instance.RandomizeSfx(drinkSound1, drinkSound2);
 
                 //Disable the soda object the player collided with.
                 other.gameObject.SetActive(false);
@@ -394,7 +408,7 @@ namespace Completed
 		private void CheckIfGameOver ()
 		{
 			//Check if food point total is less than or equal to zero.
-			if (food <= 0) 
+			if (food <= 0||infection >=20) 
 			{
 				//Call the PlaySingle function of SoundManager and pass it the gameOverSound as the audio clip to play.
 				SoundManager.instance.PlaySingle (gameOverSound);
@@ -405,18 +419,6 @@ namespace Completed
 				//Call the GameOver function of GameManager.
 				GameManager.instance.GameOver ();
 			}
-
-            if (infection >= 20)
-            {
-                //Call the PlaySingle function of SoundManager and pass it the gameOverSound as the audio clip to play.
-                SoundManager.instance.PlaySingle(gameOverSound);
-
-                //Stop the background music.
-                SoundManager.instance.musicSource.Stop();
-
-                //Call the GameOver function of GameManager.
-                GameManager.instance.GameOver1();
-            }
 
 
 		}

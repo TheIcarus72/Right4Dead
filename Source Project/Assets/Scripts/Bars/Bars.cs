@@ -19,7 +19,9 @@ namespace Completed
         {
             set
             {
-            fillAmount = Map(value, 0, MaxValue, 0, 1);
+           		//fillAmount = Map(value, 0, MaxValue, 0, 1);
+				fillAmount = fill (value, MaxValue);
+				Debug.Log (value + " " + MaxValue);
             }
 
         }
@@ -41,6 +43,11 @@ namespace Completed
         {
             return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
         }
+
+		private float fill(float value, float max)
+		{
+			return value / max;
+		}
 
     }
 }

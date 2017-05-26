@@ -172,6 +172,9 @@ namespace Completed
             {
                 animator.SetTrigger("Idle4");
             }
+
+			healthBarValue.CurrentVal = food;
+			infectionValue.CurrentVal = infection;
         }
 		
 		//AttemptMove overrides the AttemptMove function in the base class MovingObject
@@ -180,7 +183,6 @@ namespace Completed
 		{
             //Every time player moves, subtract from food points total.
             food--;
-			healthBarValue.CurrentVal--;
 
 			//Update food text display to reflect current score.
 			foodText.text = "Food: " + food;
@@ -276,7 +278,6 @@ namespace Completed
             {
                 //Add pointsPerFood to the players current food total.
                 food += pointsPerFood;
-				healthBarValue.CurrentVal += pointsPerFood;
                // playerbar.PickUpFood();
                 //Update foodText to represent current total and notify player that they gained points
                 foodText.text = "+" + pointsPerFood + " Food: " + food;
@@ -293,7 +294,6 @@ namespace Completed
             {
                 //Add pointsPerSoda to players food points total
                 food += pointsPerSoda;
-				healthBarValue.CurrentVal += pointsPerSoda;
                // playerbar.PickUpSoda();
                 //Update foodText to represent current total and notify player that they gained points
                 foodText.text = "+" + pointsPerSoda + " Food: " + food;
@@ -311,7 +311,6 @@ namespace Completed
                 
                 //Subtract pointsPerMedicine from players infection level
                 infection -= pointsPerMedicine;
-				infectionValue.CurrentVal -= pointsPerMedicine;
 
                 //Update foodText to represent current total and notify player that they gained points
                 infectionText.text = "-" + pointsPerMedicine + " Infection: " + infection;
@@ -359,7 +358,6 @@ namespace Completed
 
             //Subtract lost food points from the players total.
             food -= loss;
-			healthBarValue.CurrentVal -= loss;
             //playerbar.healthBarValue.CurrentVal -= loss;
             //Update the food display with the new total.
             foodText.text = "-"+ loss + " Food: " + food;
@@ -372,7 +370,6 @@ namespace Completed
         {
             animator.SetTrigger("playerHit");
             infection += gain;
-			infectionValue.CurrentVal += gain;
             infectionText.text = "+" + gain + "Infection: "+infection;
             CheckIfGameOver();
         }

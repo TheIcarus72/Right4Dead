@@ -25,6 +25,8 @@ namespace Completed
 		public AudioClip drinkSound2;				//2 of 2 Audio clips to play when player collects a soda object.
         public AudioClip medicineSound;             //Audio clips to play when player collects a medicine object.
         public AudioClip gameOverSound;             //Audio clip to play when player dies.
+		public GameObject TraderCanvas;
+
         private PlayerBars playerbar;
 
 
@@ -105,6 +107,10 @@ namespace Completed
             if (horizontal != 0)
 			{
 				vertical = 0;
+			}
+			if(TraderCanvas.activeSelf == true){
+				vertical = 0;
+				horizontal = 0;
 			}
 			//Check if we are running on iOS, Android, Windows Phone 8 or Unity iPhone
 #elif UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
@@ -272,6 +278,11 @@ namespace Completed
                 //Disable the player object since level is over.
                 enabled = false;
             }
+			//check if tag of the trigger collided with is Trader.
+			else if (other.tag == "Trader") 
+			{
+				TraderCanvas.SetActive (true);
+			}
 
             //Check if the tag of the trigger collided with is Food.
             else if (other.tag == "Food")
@@ -323,7 +334,12 @@ namespace Completed
 
             }
         }
-		
+		private void OnTriggerExit2D(Collider2D other)
+		{
+			if (other.tag == "Trader") {
+				TraderCanvas.SetActive (false);
+			}
+		}
 		
 		//Restart reloads the scene when called.
 		private void Restart ()

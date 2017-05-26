@@ -5,6 +5,7 @@ using Completed;
 
 public class TradeOutpost : MonoBehaviour {
 	private GameObject player;
+	public GameObject tradeCanvas;
 	public void buyMedicine() 
 	{
 		if (GameManager.instance.money >= 5){
@@ -21,5 +22,15 @@ public class TradeOutpost : MonoBehaviour {
 		GameManager.instance.playerFoodPoints += 5;
 		GameManager.instance.money--;
 		}
+	}
+
+	public void Close()
+	{
+		tradeCanvas.SetActive (false);
+	}
+
+	public void Open()
+	{
+		tradeCanvas.SetActive (true);
 	}
 }

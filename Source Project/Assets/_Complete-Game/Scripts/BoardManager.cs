@@ -32,6 +32,7 @@ namespace Completed
 		public Count foodCount = new Count (90, 100);						//Lower and upper limit for our random number of food items per level.
         public Count medicineCount = new Count(1,2);                   //Lower and upper limit for our random number of medicine items per level.
 		public GameObject exit;											//Prefab to spawn for exit.
+		public GameObject trader;										//Prefab to spawn for trader.
 		public GameObject[] floorTiles;									//Array of floor prefabs.
 		public GameObject[] wallTiles;									//Array of wall prefabs.
 		public GameObject[] foodTiles;									//Array of food prefabs.
@@ -156,6 +157,8 @@ namespace Completed
 			
 			//Instantiate the exit tile in the upper right hand corner of our game board
 			Instantiate (exit, new Vector3 (columns - 1, rows - 1, 0f), Quaternion.identity);
+			//Instantiate the trader tile in the upper left hand corner of our game board
+			Instantiate (trader, new Vector3 (columns - 14, rows - 1, 0f), Quaternion.identity);
 		}
 	}
 }

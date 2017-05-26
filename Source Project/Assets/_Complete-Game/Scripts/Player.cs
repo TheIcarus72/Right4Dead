@@ -17,6 +17,8 @@ namespace Completed
 		public Stat healthBarValue;
         public Text infectionText;                  //Ui Text to display current player infection level;
 		public Stat infectionValue;
+        public Text moneyText;
+        public Stat moneyValue;
 		public AudioClip moveSound1;				//1 of 2 Audio clips to play when player moves.
 		public AudioClip moveSound2;				//2 of 2 Audio clips to play when player moves.
 		public AudioClip eatSound1;					//1 of 2 Audio clips to play when player collects a food object.
@@ -34,6 +36,7 @@ namespace Completed
         private Animator animator;					//Used to store a reference to the Player's animator component.
 		public int food;                           //Used to store player food points total during level.
         public int infection;                       //Used to store player infection level during level.
+        public int money;
 
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
@@ -61,6 +64,8 @@ namespace Completed
             //Set the infectionText to reflect the current player infection level.
             infectionText.text = "Infection: " + infection;
 
+            moneyText.text = "Money: " + money;
+
             
             //Call the Start function of the MovingObject base class.
             base.Start ();
@@ -76,6 +81,8 @@ namespace Completed
 
             //When Player object is disabled, store the current local infection level in the GameManager so it can be re-loaded in next level.
             GameManager.instance.playerInfectionlevel = infection;
+
+            GameManager.instance.money = money;
 
 
 		}
@@ -181,14 +188,14 @@ namespace Completed
 
 			healthBarValue.CurrentVal = food;
 			infectionValue.CurrentVal = infection;
+            moneyValue.CurrentVal = money;
         }
 		
 		//AttemptMove overrides the AttemptMove function in the base class MovingObject
 		//AttemptMove takes a generic parameter T which for Player will be of the type Wall, it also takes integers for x and y direction to move in.
 		protected override void AttemptMove <T> (int xDir, int yDir)
 		{
-            //Every time player moves, subtract from food points total.
-            food--;
+           
 
 			//Update food text display to reflect current score.
 			foodText.text = "Food: " + food;
@@ -207,7 +214,9 @@ namespace Completed
 			{
 				//Call RandomizeSfx of SoundManager to play the move sound, passing in two audio clips to choose from.
 				SoundManager.instance.RandomizeSfx (moveSound1, moveSound2);
-               
+                //Every time player moves, subtract from food points total.
+                food--;
+
             }
             
             if (infection <= 4)
@@ -263,6 +272,8 @@ namespace Completed
             {
                 animator.SetTrigger("Chop4");
             }
+            money++;
+            moneyText.text = "Money: " + money;
         }
 
 

@@ -14,6 +14,7 @@ namespace Completed
         public static PlayerBars instance = null;
         //[SerializeField]
         public Stat infectionBarValue;
+        public Stat moneyBarValue;
 
 
 
@@ -39,6 +40,7 @@ namespace Completed
             DontDestroyOnLoad(gameObject);
             healthBarValue.Initialize();
 			infectionBarValue.Initialize ();
+            moneyBarValue.Initialize();
         }
 
         private void Update()

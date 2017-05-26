@@ -7,9 +7,8 @@ namespace Completed
 	{
 		public AudioSource efxSource;					//Drag a reference to the audio source which will play the sound effects.
 		public AudioSource musicSource;					//Drag a reference to the audio source which will play the music.
-		public static SoundManager instance = null;		//Allows other scripts to call functions from SoundManager.				
-		public float lowPitchRange = .95f;				//The lowest a sound effect will be randomly pitched.
-		public float highPitchRange = 1.05f;			//The highest a sound effect will be randomly pitched.
+		public static SoundManager instance = null;     //Allows other scripts to call functions from SoundManager.				
+        public float randomPitch = 1.0f;
 		
 		
 		void Awake ()
@@ -46,7 +45,7 @@ namespace Completed
 			int randomIndex = Random.Range(0, clips.Length);
 			
 			//Choose a random pitch to play back our clip at between our high and low pitch ranges.
-			float randomPitch = Random.Range(lowPitchRange, highPitchRange);
+			//float randomPitch = Random.Range(lowPitchRange, highPitchRange);
 			
 			//Set the pitch of the audio source to the randomly chosen pitch.
 			efxSource.pitch = randomPitch;

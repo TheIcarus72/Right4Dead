@@ -18,11 +18,8 @@ namespace Completed
         public Text infectionText;                  //Ui Text to display current player infection level;
 		public Stat infectionValue;
 		public AudioClip moveSound1;				//1 of 2 Audio clips to play when player moves.
-		public AudioClip moveSound2;				//2 of 2 Audio clips to play when player moves.
 		public AudioClip eatSound1;					//1 of 2 Audio clips to play when player collects a food object.
-		public AudioClip eatSound2;					//2 of 2 Audio clips to play when player collects a food object.
 		public AudioClip drinkSound1;				//1 of 2 Audio clips to play when player collects a soda object.
-		public AudioClip drinkSound2;				//2 of 2 Audio clips to play when player collects a soda object.
         public AudioClip medicineSound;             //Audio clips to play when player collects a medicine object.
         public AudioClip gameOverSound;             //Audio clip to play when player dies.
 		public GameObject TraderCanvas;
@@ -205,9 +202,9 @@ namespace Completed
 			//If Move returns true, meaning Player was able to move into an empty space.
 			if (Move (xDir, yDir, out hit)) 
 			{
-				//Call RandomizeSfx of SoundManager to play the move sound, passing in two audio clips to choose from.
-				SoundManager.instance.RandomizeSfx (moveSound1, moveSound2);
-               
+                //Call RandomizeSfx of SoundManager to play the move sound, passing in two audio clips to choose from.
+                SoundManager.instance.PlaySingle(moveSound1);
+
             }
             
             if (infection <= 4)
@@ -294,7 +291,7 @@ namespace Completed
                 foodText.text = "+" + pointsPerFood + " Food: " + food;
 
                 //Call the RandomizeSfx function of SoundManager and pass in two eating sounds to choose between to play the eating sound effect.
-                SoundManager.instance.RandomizeSfx(eatSound1, eatSound2);
+                SoundManager.instance.PlaySingle(eatSound1);
 
                 //Disable the food object the player collided with.
                 other.gameObject.SetActive(false);
@@ -310,7 +307,7 @@ namespace Completed
                 foodText.text = "+" + pointsPerSoda + " Food: " + food;
 
                 //Call the RandomizeSfx function of SoundManager and pass in two drinking sounds to choose between to play the drinking sound effect.
-                SoundManager.instance.RandomizeSfx(drinkSound1, drinkSound2);
+                SoundManager.instance.PlaySingle(drinkSound1);
 
                 //Disable the soda object the player collided with.
                 other.gameObject.SetActive(false);

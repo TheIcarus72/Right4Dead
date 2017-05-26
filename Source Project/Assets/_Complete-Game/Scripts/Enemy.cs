@@ -10,8 +10,8 @@ namespace Completed
         public int playerInfection;                         //The amount of infection to add to the player when attacking.
 
         public AudioClip attackSound1;						//First of two audio clips to play when attacking the player.
-		public AudioClip attackSound2;						//Second of two audio clips to play when attacking the player.
-		
+		public AudioClip attackSound2;                      //Second of two audio clips to play when attacking the player.
+        public AudioClip growl;
 		
 		private Animator animator;							//Variable of type Animator to store a reference to the enemy's Animator component.
 		private Transform target;							//Transform to attempt to move toward each turn.

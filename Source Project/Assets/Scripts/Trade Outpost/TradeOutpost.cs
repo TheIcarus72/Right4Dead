@@ -8,11 +8,11 @@ public class TradeOutpost : MonoBehaviour {
 	public GameObject tradeCanvas;
 	public void buyMedicine() 
 	{
-		if (player.money >= 5){
+		if (player.money >= 10){
 
             player.infection--;
             player.infectionText.text = "Infection: " + player.infection;
-            player.money -= 5;
+            player.money -= 10;
             player.moneyText.text = "Money: " + player.money;
 
             //GetComponent<Player> ().infection--;
@@ -22,11 +22,11 @@ public class TradeOutpost : MonoBehaviour {
 
 	public void buyFood()
 	{
-		if (player.money >= 1){
+		if (player.money >= 5){
 
             player.food++;
             player.foodText.text = "Food: " + player.food;
-            player.money --;
+            player.money -=5;
             player.moneyText.text = "Money: " + player.money;
         }
 	}

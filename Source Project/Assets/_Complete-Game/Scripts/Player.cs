@@ -58,6 +58,8 @@ namespace Completed
             //Get the current infection level stored in GameManager.instance between levels.
             infection = GameManager.instance.playerInfectionlevel;
 
+            money = GameManager.instance.money;
+
             //Set the foodText to reflect the current player food total.
             foodText.text = "Food: " + food;
 

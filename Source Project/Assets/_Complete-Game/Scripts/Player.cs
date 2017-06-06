@@ -2,6 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;	//Allows us to use UI.
 using UnityEngine.SceneManagement;
+using UnityEngine.Analytics;
+using System.Collections.Generic;
 
 namespace Completed
 {
@@ -422,8 +424,15 @@ namespace Completed
 				GameManager.instance.GameOver ();
 			}
 
+            Analytics.CustomEvent("EndDay", new Dictionary<string, object>
+              {
+                { "infection", infection},
+                {"food", food },
+                {"money", money}
+              });
 
-		}
+
+        }
 	}
 }
 

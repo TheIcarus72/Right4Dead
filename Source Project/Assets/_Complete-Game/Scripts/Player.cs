@@ -95,7 +95,7 @@ namespace Completed
             //Allows the infection level to not go below the 0 value when picking up medicine item
             infection = Mathf.Clamp(infection, 0, 20);
             //Allows the food level to not go above the value of 250 when picking up food items
-            food =  Mathf.Clamp(food, 0, 250);
+            food =  Mathf.Clamp(food, 0, 150);
 
             //If it's not the player's turn, exit the function.
             if (!GameManager.instance.playersTurn) return;

@@ -12,9 +12,9 @@ namespace Completed
         [SerializeField]
         private Bars bar;
        [SerializeField]
-        private float maxVal = 250;
+        private float maxVal = 150;
         [SerializeField]
-        private float currentVal = 250;
+        private float currentVal = 150;
 
 
         // public Player foodValue;

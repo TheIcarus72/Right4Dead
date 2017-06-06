@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 415aa3c5c68c42f49a630d98e181ac6b
-timeCreated: 1495614018
+guid: 4a3c1d70f30117e46b2be1637b8c2820
+timeCreated: 1496729428
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: foodicon_0
+    21300000: trade outpost background 1_0
+    21300002: trade outpost background 1_1
+    21300004: trade outpost background 1_2
+    21300006: trade outpost background 1_3
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -84,13 +87,55 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: foodicon_0
+      name: trade outpost background 1_0
       rect:
         serializedVersion: 2
-        x: 194
-        y: 127
-        width: 178
-        height: 246
+        x: 0
+        y: 150
+        width: 850
+        height: 450
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: trade outpost background 1_1
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 84
+        width: 60
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: trade outpost background 1_2
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 23
+        width: 379
+        height: 117
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: trade outpost background 1_3
+      rect:
+        serializedVersion: 2
+        x: 463
+        y: 23
+        width: 379
+        height: 117
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

@@ -6,17 +6,21 @@ using Completed;
 public class TradeOutpost : MonoBehaviour {
     public Player player;
 	public GameObject tradeCanvas;
-	public void buyMedicine() 
+    private GameplayInformation gamePlayInfo;
+
+    public void Start()
+    {
+        gamePlayInfo = GameObject.Find("GamePlayInfo").GetComponent<GameplayInformation>();
+    }
+    public void buyMedicine() 
 	{
 		if (player.money >= 10){
 
             player.infection--;
+            gamePlayInfo.MedicineBought();
             player.infectionText.text = "Infection: " + player.infection;
             player.money -= 10;
             player.moneyText.text = "Money: " + player.money;
-
-            //GetComponent<Player> ().infection--;
-            //GameManager.instance.money -= 5;
         }
 	}
 
@@ -24,10 +28,12 @@ public class TradeOutpost : MonoBehaviour {
 	{
 		if (player.money >= 5){
 
-            player.food++;
+            player.food+=2;
+            
             player.foodText.text = "Food: " + player.food;
             player.money -=5;
             player.moneyText.text = "Money: " + player.money;
+            gamePlayInfo.FoodBought();
         }
 	}
 

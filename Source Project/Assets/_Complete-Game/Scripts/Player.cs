@@ -33,12 +33,15 @@ namespace Completed
         private PlayerBars playerbar;
 
         private CamShake camshake;
+        private GameplayInformation gamePlayInfo;
         private float shakeAmount = 0.1f;
         private float shakeTime = 0.2f;
         private Animator animator;					//Used to store a reference to the Player's animator component.
 		public int food;                           //Used to store player food points total during level.
         public int infection;                       //Used to store player infection level during level.
         public int money;
+
+       
 
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
@@ -54,6 +57,7 @@ namespace Completed
             //Get a component reference to the Player's animator component
             animator = GetComponent<Animator>();
             camshake = GameObject.Find("Camera").GetComponent<CamShake>();
+            gamePlayInfo = GameObject.Find("GamePlayInfo").GetComponent<GameplayInformation>();
             //Get the current food point total stored in GameManager.instance between levels.
             food = GameManager.instance.playerFoodPoints;
 
@@ -69,7 +73,7 @@ namespace Completed
             infectionText.text = "Infection: " + infection;
 
             moneyText.text = "Money: " + money;
-
+            
             
             //Call the Start function of the MovingObject base class.
             base.Start ();
@@ -99,6 +103,7 @@ namespace Completed
             //Allows the food level to not go above the value of 250 when picking up food items
             food =  Mathf.Clamp(food, 0, 150);
 
+            money = Mathf.Clamp(money, 0, 30);
             //If it's not the player's turn, exit the function.
             if (!GameManager.instance.playersTurn) return;
 			
@@ -193,6 +198,7 @@ namespace Completed
 			healthBarValue.CurrentVal = food;
 			infectionValue.CurrentVal = infection;
             moneyValue.CurrentVal = money;
+            
         }
 		
 		//AttemptMove overrides the AttemptMove function in the base class MovingObject
@@ -220,7 +226,7 @@ namespace Completed
 				SoundManager.instance.RandomizeSfx (moveSound1, moveSound2);
                 //Every time player moves, subtract from food points total.
                 food--;
-
+               gamePlayInfo.TotalMoved();
             }
             
             if (infection <= 4)
@@ -276,7 +282,9 @@ namespace Completed
             {
                 animator.SetTrigger("Chop4");
             }
+            food--;
             money++;
+            gamePlayInfo.MoneyEarned();
             moneyText.text = "Money: " + money;
         }
 
@@ -297,6 +305,7 @@ namespace Completed
 			else if (other.tag == "Trader") 
 			{
 				TraderCanvas.SetActive (true);
+                gamePlayInfo.TraderVisits();
 			}
 
             //Check if the tag of the trigger collided with is Food.
@@ -304,8 +313,10 @@ namespace Completed
             {
                 //Add pointsPerFood to the players current food total.
                 food += pointsPerFood;
+                gamePlayInfo.TotalFood();
+
                // playerbar.PickUpFood();
-                //Update foodText to represent current total and notify player that they gained points
+               //Update foodText to represent current total and notify player that they gained points
                 foodText.text = "+" + pointsPerFood + " Food: " + food;
 
                 //Call the RandomizeSfx function of SoundManager and pass in two eating sounds to choose between to play the eating sound effect.
@@ -320,6 +331,7 @@ namespace Completed
             {
                 //Add pointsPerSoda to players food points total
                 food += pointsPerSoda;
+                gamePlayInfo.TotalFood();
                // playerbar.PickUpSoda();
                 //Update foodText to represent current total and notify player that they gained points
                 foodText.text = "+" + pointsPerSoda + " Food: " + food;
@@ -337,6 +349,7 @@ namespace Completed
                 
                 //Subtract pointsPerMedicine from players infection level
                 infection -= pointsPerMedicine;
+                gamePlayInfo.TotalMedicine();
 
                 //Update foodText to represent current total and notify player that they gained points
                 infectionText.text = "-" + pointsPerMedicine + " Infection: " + infection;
@@ -392,6 +405,7 @@ namespace Completed
 
             camshake.Shake(shakeAmount, shakeTime);
 
+            
             //Update the food display with the new total.
             foodText.text = "-"+ loss + " Food: " + food;
 			
@@ -404,6 +418,7 @@ namespace Completed
             animator.SetTrigger("playerHit");
             infection += gain;
             infectionText.text = "+" + gain + "Infection: "+infection;
+            gamePlayInfo.TotalHit();
             CheckIfGameOver();
         }
 
@@ -433,6 +448,7 @@ namespace Completed
 
 
         }
+
 	}
 }
 

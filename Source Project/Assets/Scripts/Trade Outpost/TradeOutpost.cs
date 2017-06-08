@@ -26,12 +26,12 @@ public class TradeOutpost : MonoBehaviour {
 
 	public void buyFood()
 	{
-		if (player.money >= 5){
+		if (player.money >= 1){
 
-            player.food+=2;
+            player.food+=1;
             
             player.foodText.text = "Food: " + player.food;
-            player.money -=5;
+            player.money -=1;
             player.moneyText.text = "Money: " + player.money;
             gamePlayInfo.FoodBought();
         }

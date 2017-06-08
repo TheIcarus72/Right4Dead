@@ -75,7 +75,7 @@ namespace Completed
         public void TraderVisits()
         {
             totalTrader++;
-            trader.text = "Total trader visits: " + totalTrader;
+			trader.text = "Total trader visits: " + (totalTrader / 2);
         }
 
         public void MoneyEarned()
@@ -93,7 +93,7 @@ namespace Completed
         public void MedicineBought()
         {
             totalMedicineBought++;
-            foodBought.text = "Total medicine items bought at trader " + totalMedicineBought;
+			medicineBougt.text = "Total medicine items bought at trader " + totalMedicineBought;
         }
 
     }

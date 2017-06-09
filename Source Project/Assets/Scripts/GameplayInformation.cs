@@ -8,9 +8,10 @@ namespace Completed
     public class GameplayInformation : MonoBehaviour
     {
 
-        public static GameplayInformation instance = null;
+        public static GameplayInformation instance = null; //Static instance of GameplayInformation which allows it to be accessed by any other script.
 
-        public Text moved;
+        
+        public Text moved;              
         public Text food;
         public Text medicine;
         public Text hit;

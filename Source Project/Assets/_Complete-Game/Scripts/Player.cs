@@ -11,17 +11,22 @@ namespace Completed
 	public class Player : MovingObject
 	{
 		public float restartLevelDelay = 1f;		//Delay time in seconds to restart level.
+        private float shakeAmount = 0.1f;
+        private float shakeTime = 0.2f;
+
 		public int pointsPerFood = 10;				//Number of points to add to player food points when picking up a food object.
 		public int pointsPerSoda = 20;				//Number of points to add to player food points when picking up a soda object.
         public int pointsPerMedicine = 2;           //Number of points to subtract from player infection level when picking up medicine.
 		public int wallDamage = 1;					//How much damage a player does to a wall when chopping it.
+		public int food;                           //Used to store player food points total during level.
+        public int infection;                       //Used to store player infection level during level.
+        public int money;
+
 		public Text foodText;						//UI Text to display current player food total.
-		public Stat healthBarValue;
         public Text infectionText;                  //Ui Text to display current player infection level;
-		public Stat infectionValue;
         public Text moneyText;
-        public Stat moneyValue;
-		public AudioClip moveSound1;				//1 of 2 Audio clips to play when player moves.
+
+        public AudioClip moveSound1;				//1 of 2 Audio clips to play when player moves.
 		public AudioClip moveSound2;				//2 of 2 Audio clips to play when player moves.
 		public AudioClip eatSound1;					//1 of 2 Audio clips to play when player collects a food object.
 		public AudioClip eatSound2;					//2 of 2 Audio clips to play when player collects a food object.
@@ -30,19 +35,12 @@ namespace Completed
         public AudioClip medicineSound;             //Audio clips to play when player collects a medicine object.
         public AudioClip gameOverSound;             //Audio clip to play when player dies.
 		public GameObject TraderCanvas;
-        private PlayerBars playerbar;
+        private Animator animator;					//Used to store a reference to the Player's animator component.
 
         private CamShake camshake;
         private GameplayInformation gamePlayInfo;
-        private float shakeAmount = 0.1f;
-        private float shakeTime = 0.2f;
-        private Animator animator;					//Used to store a reference to the Player's animator component.
-		public int food;                           //Used to store player food points total during level.
-        public int infection;                       //Used to store player infection level during level.
-        public int money;
-
-       
-
+		public Stat stat;       
+        private PlayerBars playerbar;
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
         private Vector2 touchOrigin = -Vector2.one;	//Used to store location of screen touch origin for mobile controls.
@@ -178,6 +176,8 @@ namespace Completed
 				AttemptMove<Wall> (horizontal, vertical);
 			}
 
+
+            //Changes the player idle animation depending on the infection level 
             if(infection<=4)
             {
                 animator.SetTrigger("Idle1");
@@ -195,9 +195,9 @@ namespace Completed
                 animator.SetTrigger("Idle4");
             }
 
-			healthBarValue.CurrentVal = food;
-			infectionValue.CurrentVal = infection;
-            moneyValue.CurrentVal = money;
+			stat.CurrentVal = food;
+			stat.CurrentVal = infection;
+            stat.CurrentVal = money;
             
         }
 		
@@ -438,13 +438,6 @@ namespace Completed
 				//Call the GameOver function of GameManager.
 				GameManager.instance.GameOver ();
 			}
-
-            Analytics.CustomEvent("EndDay", new Dictionary<string, object>
-              {
-                { "infection", infection},
-                {"food", food },
-                {"money", money}
-              });
 
 
         }

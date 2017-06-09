@@ -11,7 +11,6 @@ namespace Completed
         private float fillAmount;
         [SerializeField]
         private Image content;
-        //private Player playerfood;
         public float MaxValue { get; set; }
 
 

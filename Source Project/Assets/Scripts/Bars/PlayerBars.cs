@@ -10,21 +10,13 @@ namespace Completed
 
     public class PlayerBars : MonoBehaviour
     {
-        public Stat healthBarValue;
+        public Stat stat;
         public static PlayerBars instance = null;
-        //[SerializeField]
-        public Stat infectionBarValue;
-        public Stat moneyBarValue;
-
-
-
-
 
         private void Awake()
         {
             
-           
-            //Check if instance already exists
+             //Check if instance already exists
             if (instance == null)
 
                 //if not, set instance to this
@@ -38,13 +30,9 @@ namespace Completed
 
             //Sets this to not be destroyed when reloading scene
             DontDestroyOnLoad(gameObject);
-            healthBarValue.Initialize();
-			infectionBarValue.Initialize ();
-            moneyBarValue.Initialize();
-        }
-
-        private void Update()
-        {
+            stat.Initialize();
+			stat.Initialize ();
+            stat.Initialize();
         }
     }
 }

@@ -4,23 +4,8 @@ using UnityEngine;
 
 public class CamShake : MonoBehaviour
 {
-    public Camera cam;
-    private float shakeAmount = 0;
-    public  CamShake camShake;
-
-
-    public void Awake()
-    {
-        if (cam == null)
-        {
-            cam = Camera.main;
-        }
-        if (camShake==null)
-        {
-            camShake = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CamShake>();
-        }
-
-    }
+    private Camera cam;              //Reference to the camera object 
+    private float shakeAmount = 0;  
 
     public void Update()
     {
